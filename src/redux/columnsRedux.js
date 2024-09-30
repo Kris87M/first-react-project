@@ -1,8 +1,14 @@
+import { createSelector } from "reselect";
 import shortid from "shortid";
 
 //selectors
 export const getAllColumns = (state => state.columns);
-export const getColumnsByList = ({ columns }, listId) => columns.filter(column => column.listId === listId);
+const getListId = (_, listId) => listId;
+
+// memoized selector
+export const getColumnsByList = createSelector(
+  [getAllColumns, getListId],
+  (columns, listId) => columns.filter(column => column.listId === listId));
 
 // action
 const createActionName = actionName => `app/columns/${actionName}`;

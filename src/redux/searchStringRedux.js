@@ -1,7 +1,18 @@
 import strContains from "../utils/strContains";
+import { createSelector } from "reselect";
 
-//selectors
-export const getFilteredCards = ({searchString, cards}, columnId) => cards.filter(card => card.columnId === columnId && strContains(card.title, searchString));
+const getCards = state => state.cards;
+const getSearchString = state => state.searchString;
+const getColumnId = (_, columnId) => columnId;
+
+// memoized selector
+export const getFilteredCards = createSelector(
+  [getCards, getSearchString, getColumnId],
+  (cards, searchString, columnId) => 
+    cards.filter(card => 
+      card.columnId === columnId && strContains(card.title, searchString)
+    )
+);
 
 // action
 const createActionName = actionName => `app/searchString/${actionName}`;
